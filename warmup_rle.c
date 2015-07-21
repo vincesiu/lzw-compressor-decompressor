@@ -15,14 +15,14 @@ void compression(char *file) {
 	while ((c = fgetc(fp_input)) != EOF){
 		if (c != active_char || active_char_count == 9){
 			if (active_char_count == 1)
-				fprintf(fp_output, "%c", (active_char_count+128));
+				fprintf(fp_output, "%c", (active_char+128));
 			else
 				fprintf(fp_output, "%d%c", active_char_count, active_char);
-			active_char = c;
-			active_char_count = 1;
+				active_char = c;
+				active_char_count = 1;
 		}
 		else {
-		active_char_count++;
+			active_char_count++;
 		}	
 	}
 
@@ -52,7 +52,6 @@ void decompression (char *file) {
 			for (idx = 0; idx < count; idx++)
 				fprintf(fp_output, "%c", active_char);		
 		}
-			
 	}
 }
 
