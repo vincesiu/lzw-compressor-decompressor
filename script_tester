@@ -1,0 +1,2 @@
+gcc fileTester.c -I. -g -o exe
+gdb ./exe
