@@ -61,44 +61,38 @@ void lzw_decompress(struct Filehandler *handler_input) {
 		
 	char *string_code = calloc(65537, sizeof(char));	
 
-	int code;
-	int length = 0;	
+	int code = filehandler_read(handler_input);
+	int length = 1;	
 	int idx;
 	char *string_write;
+
 	if (handler_input->read_or_write == 'w')
 		printf("error: trying to decompress a writeonly");
+	if (code == -1) 
+		printf("error: cannot decompress empty file");
+	
+	string_write[0] = code;
+	fwrite(string_write, sizeof(char), strlen(string_write), fd);
+	string_code[0] = code;	
 	
 	while((code = filehandler_read(handler_input)) != -1) {
 		if (code != dict->dict_length) {
 			string_write = dict->dict[code];	
 			fwrite(string_write, sizeof(char), strlen(string_write), fd);
-			strcpy((string_code + length), string_write);
-			length += strlen(string_write);
-			if (dictionary_query(dict, string_code) == 0) {
-				for (idx = 0; idx < 65537; idx++) {
-					if (string_code[idx] == 0)
-						break;
-					string_code[idx] = 0;		
-				}
+			//strcpy((string_code + length), string_write);
+			string_code[length] = string_write[0];
+			dictionary_query(dict, string_code);
 				strcpy(string_code, string_write);
 				length = strlen(string_write);
-			}
+				string_code[length] = 0;
 		}		
 		else {
-			printf("honolulu\n");
 			string_code[length] = string_code[0];
 			dictionary_query(dict, string_code);
 			string_write = dict->dict[code];
 			fwrite(string_write, sizeof(char), strlen(string_write), fd);
-			for (idx = 0; idx < 65537; idx++) {
-				if (string_code[idx] == 0)
-					break;	
-				string_code[idx] = 0;
-			}
-//			string_code[0] = string_write[0];
-//			length = 1;	
-			strcpy(string_code, string_write);
-				length = strlen(string_write);
+			length++;
+			string_code[length] = 0;
 
 		}
 	}	
