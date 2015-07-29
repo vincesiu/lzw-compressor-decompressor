@@ -87,6 +87,8 @@ void lzw_compress(char *inputFile) {
 		}	
 	}
 
+	filehandler_write(handler_output, dictidx_prev);
+
 	free(string_code);
 	free(string_nocode);
 	dictionary_close(dict);
@@ -132,7 +134,6 @@ void lzw_decompress(char *inputFile) {
 			string_code[length] = 0;
 		}
 	}	
-			
 
 	free(string_code);
 	dictionary_close(dict);

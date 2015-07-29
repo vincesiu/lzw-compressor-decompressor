@@ -1,2 +1,7 @@
 exe
 *.swp
+script_tester
+testcompressedfile
+compressedfile
+decompressedfile
+precompressedfile
