@@ -23,16 +23,16 @@ struct Filehandler *filehandler_init(char *fileName, char read_or_write) {
 	else if (read_or_write == 'w')
 		handler->fd = fopen(fileName, "w");
 	else
-		printf("error: invalid file access mode passed in");
+		printf("error: invalid file access mode passed in\n");
 
 	return handler;
 }
 
 void filehandler_write(struct Filehandler *handler, int code) {
 	if (handler->read_or_write != 'w')
-		printf("error: attempting to write to readonly");
+		printf("error: attempting to write to readonly\n");
 	if (code < 0 || 4096 <= code)	
-		printf("error: invalid code passed to filehandler_write");
+		printf("error: invalid code passed to filehandler_write\n");
 
 	unsigned char *buffer = malloc(sizeof(unsigned char) * 2);
 
@@ -45,7 +45,7 @@ void filehandler_write(struct Filehandler *handler, int code) {
 
 int filehandler_read(struct Filehandler *handler) {
 	if (handler->read_or_write != 'r')
-		printf("error: attempting to read a writeonly");
+		printf("error: attempting to read a writeonly\n");
 	unsigned char *buffer = malloc(sizeof(unsigned char) * 2);
 	if(fread(buffer, sizeof(unsigned char), 2, handler->fd) == 0) {
 		free(buffer);

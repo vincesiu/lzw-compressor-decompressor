@@ -6,7 +6,14 @@
 
 int main (int argc, char *argv[]) {
 
-	struct Filehandler *outputFile = filehandler_init("testoutputfile", 'w');
+
+lzw_compress("precompressedfile");
+lzw_decompress("compressedfile");
+
+/*
+
+
+	struct Filehandler *outputFile = filehandler_init("testcompressedfile", 'w');
 
 	filehandler_write(outputFile, 'b');
 	filehandler_write(outputFile, 'a');
@@ -18,7 +25,8 @@ int main (int argc, char *argv[]) {
 	filehandler_write(outputFile, 'n');
 	filehandler_write(outputFile, 'd');
 	filehandler_write(outputFile, 131);
-/*
+
+
 	filehandler_write(outputFile, 'a');
 	filehandler_write(outputFile, 'b');
 	filehandler_write(outputFile, 'c');
@@ -33,14 +41,13 @@ int main (int argc, char *argv[]) {
 	filehandler_write(outputFile, 138);
 	filehandler_write(outputFile, 135);
 	filehandler_write(outputFile, 'c');
-*/
+
 
 	filehandler_close(outputFile);
 
 
-	struct Filehandler *inputFile = filehandler_init("testoutputfile", 'r');
-	lzw_decompress(inputFile);
-	filehandler_close(inputFile);
-	printf("success!\n");
+	lzw_decompress("testcompressedfile");
+*/
 	return EXIT_SUCCESS;
+
 }
