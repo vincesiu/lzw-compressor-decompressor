@@ -15,12 +15,12 @@ struct Dictionary *dictionary_init() {
 	struct Dictionary *foo = malloc(sizeof(struct Dictionary));
 	int idx;
 	char *temp;
-	for (idx = 0; idx < 128; idx++) {
+	for (idx = 0; idx < 256; idx++) {
 		temp = malloc(sizeof(char));
 		*temp = idx;
 		foo->dict[idx] = temp;	
 	}
-	foo->dict_length = 128;
+	foo->dict_length = 256;
 	return foo;
 }
 
@@ -56,7 +56,7 @@ void lzw_compress(char *inputFile) {
 	struct Filehandler *handler_output = filehandler_init("compressedfile", 'w');
 	struct Dictionary *dict = dictionary_init();
 	
-	char code = fgetc(fd_input);
+	int code = fgetc(fd_input);
 	char *string_code = calloc(65538, sizeof(char));
 	int idx = 1;
 	int dictidx_cur;
@@ -107,17 +107,20 @@ void lzw_decompress(char *inputFile) {
 	fwrite(string_code, sizeof(char), 1, fd_output);
 	
 	while((code = filehandler_read(handler_input)) != -1) {
+		printf("%c, %i\n", code, code);
 		if (code != dict->dict_length) {
 			string_write = dict->dict[code];	
 			fwrite(string_write, sizeof(char), strlen(string_write), fd_output);
 			string_code[length] = string_write[0];
+			string_code[length+1] = 0;
 			dictionary_query(dict, string_code);
-				strcpy(string_code, string_write);
-				length = strlen(string_write);
-				string_code[length] = 0;
+			strcpy(string_code, string_write);
+			length = strlen(string_write);
+			string_code[length] = 0;
 		}		
 		else {
 			string_code[length] = string_code[0];
+			string_code[length + 1] = 0;
 			dictionary_query(dict, string_code);
 			string_write = dict->dict[code];
 			fwrite(string_write, sizeof(char), strlen(string_write), fd_output);
